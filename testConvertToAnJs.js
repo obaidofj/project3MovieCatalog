@@ -72,13 +72,23 @@ let vr=[
 ]
 
 let vr2=vr[0].results;
-
+let newMovies=[];
+let movie;
 vr2.forEach((el)=>{
-    {
+     movie= {
         "id":2,
+        "original_server_id": el.id,
         "title": el.title ,
-        "director": director,
-        "relase_year": year ,
-        "genre": "fiction"
+        "director": "-",
+        "about":el.overview,
+        "relase_year": new Date(el.release_date).getFullYear() ,
+        "genre": el.genre_ids.join(',')
       };
+      newMovies.push(movie);
 })
+
+let data=[];
+data= data.concat(newMovies)
+
+console.log(data.length);
+console.log(data);

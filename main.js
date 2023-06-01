@@ -2,11 +2,22 @@
 import fs from 'fs';
 import { movies } from "./moveisManagments.js";
 import { input as inp, rl } from "./inputHandling.js";
+import * as utils from'./helperFunctions.js';
 
-let chooseMode = true;
-let moveiClass = new movies();
+
+ let chooseMode;
+export { chooseMode };
+chooseMode= true;
+
+export let moveiClassObj = new movies();
 let input = new inp();
 
+let eqeIdOfChoice={
+  1:28,
+  2: 35,
+  3: 99,
+  4: 18
+}
 
 
 
@@ -14,11 +25,11 @@ export async function handelKey(key) {
   if (!isNaN(key.name) && key.name != "" && chooseMode != false) {
     chooseMode = false;
     switch (key.name) {
-      case "1":
+      case "1": 
         console.log(`You Chosed the choice to ':'\n# > > `);
 
         (async () => {
-            await moveiClass.displayCatalog();
+            await moveiClassObj.displayCatalog();
             console.log("\nChoose what to do next ");
             chooseMode = true;
         })();
@@ -27,7 +38,7 @@ export async function handelKey(key) {
         console.log(`You Chosed the choice to ':'\n# > > `);
         (async () => {
           let movie= await getMovieData();
-          await moveiClass.addNewMovie(movie);
+          await moveiClassObj.addNewMovie(movie);
         
         console.log("\nChoose what to do next ");
         chooseMode = true;
@@ -37,26 +48,27 @@ export async function handelKey(key) {
         console.log(`You Chosed the choice to ':'\n# > > `);
 
         (async () => {
-          moveiClass.updateMoveDeials();
+          moveiClassObj.updateMoveDeials();
           console.log("\nChoose what to do next ");
           chooseMode = true;
         })();
         break;
       case "4":
         console.log(`You Chosed the choice to ':'\n# > > `);
-        rl.resume();
-        rl.write("  ");
+        // rl.resume();
+        // rl.write("  ");
+        chooseMode = false;
         (async () => {
-          moveiClass.deleteMovie();
+          moveiClassObj.deleteMovie();
           console.log("\nChoose what to do next ");
           chooseMode = true;
         })();
-          
+        
         break;
       case "5":
         console.log(`You Chosed the choice to ':'\n# > > `);
         (async () => {
-          moveiClass.searchMovies();
+          moveiClassObj.searchMovies();
           console.log("\nChoose what to do next ");
           chooseMode = true;
         })();
@@ -65,7 +77,7 @@ export async function handelKey(key) {
         console.log(
           `You Chosed the choice to ':'\n# > > ` );
         (async () => {
-          moveiClass.fetchFromServer();
+          await moveiClassObj.fetchFromServer();
           console.log("\nChoose what to do next ");
           chooseMode = true;
         })();
@@ -74,7 +86,7 @@ export async function handelKey(key) {
         console.log(
           `You Chosed the choice to 'Sort tasks by the due date:'\n# > > ` );
         (async () => {
-          moveiClass.loadPreviouseData();
+          moveiClassObj.loadPreviouseData();
           console.log("\nChoose what to do next ");
           chooseMode = true;
         })();
@@ -112,23 +124,49 @@ export async function handelKey(key) {
 async function getMovieData(){
   chooseMode = false;
   console.log('Enter Movie Name: ');
-let title=await input.getInput();
+  let title;
+  while (true) {
+     title=await input.getInput();
+    if (utils.isValidTextInput(title,'title')) break;
+  }
+
 console.log(title);
 console.log("Enter Movie Director: ");
-let director=await input.getInput();
+let director;
+while (true) {
+   director=await input.getInput();
+  if (utils.isValidTextInput(director,'director')) break;
+}
+
 console.log(director);
+console.log("Enter Info about Movie: ");
+ let about
+while (true) {
+ about=await input.getInput();
+  if (utils.isValidTextInput(about,'about')) break;
+}
+console.log(about);
 console.log("Enter Movie Release Year: ");
-let year=await input.getInput();
+let year
+while (true) {
+  year=await input.getInput();
+  if (utils.isValidYear(year)) break;
+}
 console.log(year);
 console.log("Enter Movie gener (1 for Action , 2 for Comedy , 3 for Documentary , 4 for Drama): ");
-let gener=await input.getInput();
+let gener;
+while (true) {
+  gener=await input.getInput();
+  if (utils.isValidGenreChoice(gener)) break;
+}
 console.log(gener);
 let movie={
-  "id":2,
+  "id": utils.getLargestID(moveiClassObj.data)+1 ,
   "title": title ,
   "director": director,
+  "about": about ,
   "relase_year": year ,
-  "genre": "fiction"
+  "genre": utils.getNameById[eqeIdOfChoice[Number(gener)]]
 }
 return movie;
 }

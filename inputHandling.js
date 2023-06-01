@@ -32,6 +32,30 @@ export class input {
     return input;
   }
   
+   async  enterValidIDofObj(arOfObjects,objType) {
+    let elInd = "";
+  
+    while (true) {
+      let tid = -1;
+      let elInd = "";
+  
+      tid = await input.takeInput();
+  
+      arOfObjects.forEach((element, ind) => {
+        if (element["id"] === parseInt(tid)) {
+          elInd = ind;
+          return;
+        }
+      });
+  
+      if (elInd === "") {
+        console.log(
+          `There is no ${objType} with ID: ${tid}. Please enter a valid ${objType} ID.`
+        );
+      } else return elInd;
+    }
+  }
+  
 
 }
   
