@@ -28,7 +28,7 @@ let eqeIdOfChoice={
     3: 99,
     4: 18
   }
-  
+
 const input =new inp();
 export class movies {
   data = [];
@@ -67,8 +67,22 @@ export class movies {
     if (res === true) console.log(`\n\t>> Movie data added succssfully`);
   }
 
-  updateMoveDeials() {
-    console.log("func");
+  async updateMoveDeials() {
+
+  console.log(`Enter the id for the Movie you want to Update its data :`);
+  let elInd = "";
+
+  elInd = await enterValidIDofObj(this.data);
+  if(elInd!=='')
+  {
+      let title=this.data[elInd].title;
+      let id=this.data[elInd].id;
+    
+    console.log(`
+    the Data for the Movie with ID: ${id} is now updated, \n and now it is as the following:`);
+  }
+  
+  
   }
 
   async deleteMovie() {
