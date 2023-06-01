@@ -16,26 +16,42 @@
 
 
 //modules
-
+ 
 //movie func modul
-import {readJsonFile, writeToJSON , jsonData } from'./handelFiles.js';
+import {readJsonFile, writeToJSON , jsonData } from'./filesHandling.js';
 
 export class movies{
+ 
+    data;
+
+    constructor(data=[]) {
+        this.data = data;
+      }
 
     async displayCatalog()
     { 
-        // (async ()=>{
-        console.log("dis1");
+       
+        this.data=await readJsonFile('movies.json');
 
-        let data=await readJsonFile('movies.json');
-        console.log("dis2", data);
-        // })();
-        // console.log(JSON.stringify(jsonData, null, 2));
+    if(this.data.length!==0)
+        this.data.forEach((el,ind)=>{
+            console.log(`------------------------------------------------------------------`);
+            console.log( `# ${ind}: \t ID: ${el.id} \n \tMovie Tile: ${el.title} \n \tDirector: ${el.director} \n \tRelease Year:  ${el.relase_year} \n \tGenre:  ${el.genre} `);
+            console.log(`------------------------------------------------------------------`);
+        })
+     else
+      console.log(` \tThe File Is Empty (><) , \n\tyou can choose 2 to add new movie or 6 to fetch data from server `);
+  
     }
 
-    addNewMovie()
+    async addNewMovie(movie)
     {
-        console.log("func");
+        this.data=await readJsonFile('movies.json');
+        this.data.push(movie);
+        let res=await writeToJSON(this.data);
+        if(res===true)
+        console.log(`\n\tMovie data added succssfully`);
+
     }
 
 
@@ -54,8 +70,10 @@ export class movies{
         console.log("func");
     }
 
-    fetchFromServer()
+    async fetchFromServer()
     {
+        let fetcheadData;
+
         const options = {
             method: 'GET',
             headers: {
@@ -64,10 +82,15 @@ export class movies{
             }
           };
           
-          fetch('https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc', options)
+          await fetch('https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc', options)
             .then(response => response.json())
-            .then(response => console.log(response))
+            .then(response => fetcheadData=JSON.parse(response))
             .catch(err => console.error(err));
+        
+        fetcheadData.forEach( el =>{
+
+        })
+         
     }
 }
 
