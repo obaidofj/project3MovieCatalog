@@ -12,12 +12,6 @@ chooseMode= true;
 export let moveiClassObj = new movies();
 let input = new inp();
 
-let eqeIdOfChoice={
-  1:28,
-  2: 35,
-  3: 99,
-  4: 18
-}
 
 
 
@@ -36,8 +30,9 @@ export async function handelKey(key) {
         break;
       case "2":
         console.log(`You Chosed the choice to ':'\n# > > `);
+        chooseMode = false;
         (async () => {
-          let movie= await getMovieData();
+          let movie= await moveiClassObj.getMovieData();
           await moveiClassObj.addNewMovie(movie);
         
         console.log("\nChoose what to do next ");
@@ -59,7 +54,7 @@ export async function handelKey(key) {
         // rl.write("  ");
         chooseMode = false;
         (async () => {
-          moveiClassObj.deleteMovie();
+          await moveiClassObj.deleteMovie();
           console.log("\nChoose what to do next ");
           chooseMode = true;
         })();
@@ -95,16 +90,10 @@ export async function handelKey(key) {
         console.log(`You Chosed the choice to Quit: bye ..! `);
         rl.close();
         break;
-        case "0":
-          (async () => {
-          await readJsonFile('movies.json')
-          console.log("\nChoose what to do next ");
-          chooseMode = true;
-        })();
-          break;
+        
       default:
         console.log(
-          `You have to choose a number (between 1 to 9) to do action as the List Above`
+          `You have to choose a number (between 1 to 8) to do action as the List Above`
         );
         chooseMode = true;
         break;
@@ -121,55 +110,7 @@ export async function handelKey(key) {
   };
 
 
-async function getMovieData(){
-  chooseMode = false;
-  console.log('Enter Movie Name: ');
-  let title;
-  while (true) {
-     title=await input.getInput();
-    if (utils.isValidTextInput(title,'title')) break;
-  }
 
-console.log(title);
-console.log("Enter Movie Director: ");
-let director;
-while (true) {
-   director=await input.getInput();
-  if (utils.isValidTextInput(director,'director')) break;
-}
-
-console.log(director);
-console.log("Enter Info about Movie: ");
- let about
-while (true) {
- about=await input.getInput();
-  if (utils.isValidTextInput(about,'about')) break;
-}
-console.log(about);
-console.log("Enter Movie Release Year: ");
-let year
-while (true) {
-  year=await input.getInput();
-  if (utils.isValidYear(year)) break;
-}
-console.log(year);
-console.log("Enter Movie gener (1 for Action , 2 for Comedy , 3 for Documentary , 4 for Drama): ");
-let gener;
-while (true) {
-  gener=await input.getInput();
-  if (utils.isValidGenreChoice(gener)) break;
-}
-console.log(gener);
-let movie={
-  "id": utils.getLargestID(moveiClassObj.data)+1 ,
-  "title": title ,
-  "director": director,
-  "about": about ,
-  "relase_year": year ,
-  "genre": utils.getNameById[eqeIdOfChoice[Number(gener)]]
-}
-return movie;
-}
 
 function printProgramMenu() {
   console.log(`

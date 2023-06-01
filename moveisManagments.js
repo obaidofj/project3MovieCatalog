@@ -18,10 +18,18 @@
 
 //movie func modul
 import { readJsonFile, writeToJSON, jsonData } from "./filesHandling.js";
-import { getNameById } from "./helperFunctions.js";
 import * as utils from "./helperFunctions.js";
 import { moveiClassObj as obj , chooseMode } from "./main.js";
+import { input as inp, rl } from "./inputHandling.js";
 
+let eqeIdOfChoice={
+    1:28,
+    2: 35,
+    3: 99,
+    4: 18
+  }
+  
+const input =new inp();
 export class movies {
   data = [];
 
@@ -68,14 +76,14 @@ export class movies {
   console.log(`Enter the id for the Movie you want to delete :`);
   let elInd = "";
 
-  elInd = await enterValidID(this.data);
+  elInd = await enterValidIDofObj(this.data);
   if(elInd!=='')
   {
     let id=this.data[elInd].id;
     let title=this.data[elInd].title;
     this.data.splice(elInd, 1);
     console.log(`
-    the Movie with ID: ${id} and has Title : ${name} now is deleted`);
+    the Movie with ID: ${id} and has Title: ${title} , now is deleted`);
   }
   
   }
@@ -129,4 +137,83 @@ export class movies {
     let res = await writeToJSON(this.data);
     if (res === true) console.log(`\n\tMovies Fetched and added succssfully`);
   }
+
+
+  async  getMovieData(){
+    
+    console.log('Enter Movie Name: ');
+    let title;
+    while (true) {
+       title=await input.getInput();
+      if (utils.isValidTextInput(title,'title')) break;
+    }
+  
+  console.log(title);
+  console.log("Enter Movie Director: ");
+  let director;
+  while (true) {
+     director=await input.getInput();
+    if (utils.isValidTextInput(director,'director')) break;
+  }
+  
+  console.log(director);
+  console.log("Enter Info about Movie: ");
+   let about
+  while (true) {
+   about=await input.getInput();
+    if (utils.isValidTextInput(about,'about')) break;
+  }
+  console.log(about);
+  console.log("Enter Movie Release Year: ");
+  let year
+  while (true) {
+    year=await input.getInput();
+    if (utils.isValidYear(year)) break;
+  }
+  console.log(year);
+  console.log("Enter Movie gener (1 for Action , 2 for Comedy , 3 for Documentary , 4 for Drama): ");
+  let gener;
+  while (true) {
+    gener=await input.getInput();
+    if (utils.isValidGenreChoice(gener)) break;
+  }
+  console.log(gener);
+  let movie={
+    "id": utils.getLargestID(obj.data)+1 ,
+    "title": title ,
+    "director": director,
+    "about": about ,
+    "relase_year": year ,
+    "genre": utils.getNameById[eqeIdOfChoice[Number(gener)]]
+  }
+  return movie;
+  }
+
+
 }
+
+
+async function enterValidIDofObj(arOfObjects) {
+    let elInd = "";
+  
+    while (true) {
+      let tid = -1;
+      let elInd = "";
+  
+      tid = await input.getInput();
+  
+      arOfObjects.forEach((element, ind) => {
+        if (element["id"] === parseInt(tid)) {
+          elInd = ind;
+          return;
+        }
+      });
+  
+      if (elInd === "") {
+        console.log(
+          `There is no Movie with ID: ${tid}. Please enter a valid Movie ID.`
+        );
+      } else return elInd;
+    }
+  }
+  
