@@ -97,13 +97,13 @@ export function getLargestID(objects) {
 }
 
 export  function isValidYear(year) {
-  // for any year between 1800 to (current year) 2023+5 as there are films scheduals in future / some times
+  // for any year between 1800 to (current year) + 5 as there are films scheduals in future / some times
 
   var currentYear = new Date().getFullYear();
   var maxYear = currentYear + 5;
   var yearRegex = new RegExp(
     "^(18[0-9][0-9]|19[0-9][0-9]|20[0-"+ maxYear.toString().slice(-2,-1) +"]" +
-    "[0-" + maxYear.toString().slice(-1) + "])$"
+    "[0-" + maxYear.toString().slice(-1) + "]|20[0-1][0-9])$"
   );
 
   if (yearRegex.test(year)) {
@@ -128,6 +128,12 @@ export function isValidTextInput(inp,type) {
   } else {
     return false;
   }
+}
+
+export function isValidYesOrNo(inp) {
+
+    return ['yes','y','no','n'].includes(inp);
+
 }
 
 export function isValidGenreChoice(inp){

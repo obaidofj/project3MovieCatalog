@@ -40,15 +40,13 @@ export class movies {
   }
 
   async displayCatalog() {
-    // this.data = await readJsonFile("movies.json");
+   
 
     if (this.data.length !== 0)
       this.data.forEach((el, ind) => {
+       
         console.log(
-          `------------------------------------------------------------------`
-        );
-        console.log(
-          `#Seq_ ${ind}: \t ID: ${el.id} \n \tMovie Tile: ${el.title} \n \tDirector: ${el.director} \n \tAbout the Movie:  ${el.relase_year} \n \tRelease Year:  ${el.relase_year} \n \tGenre:  ${el.genre} `
+          `#Seq_${ind}:---------------------------------------------------------- \n\tMovie ID: ${el.id} \n \tMovie Tile: ${el.title} \n \tDirector: ${el.director} \n \tAbout the Movie:  ${el.relase_year} \n \tRelease Year:  ${el.relase_year} \n \tGenre:  ${el.genre} `
         );
         console.log(
           `------------------------------------------------------------------`
@@ -61,7 +59,6 @@ export class movies {
   }
 
   async addNewMovie(movie) {
-    // this.data = await readJsonFile("movies.json");
     this.data.push(movie);
     let res = await writeToJSON(this.data);
     if (res === true) console.log(`\n\t>> Movie data added succssfully`);
@@ -72,14 +69,22 @@ export class movies {
   console.log(`Enter the id for the Movie you want to Update its data :`);
   let elInd = "";
 
+
   elInd = await enterValidIDofObj(this.data);
   if(elInd!=='')
   {
-      let title=this.data[elInd].title;
-      let id=this.data[elInd].id;
-    
+    let id=this.data[elInd].id;
+    let newData=await this.getMovieData("modify");
+    this.data[elInd].title=newData.title;
+    this.data[elInd].director=newData.director;
+    this.data[elInd].about=newData.about;
+    this.data[elInd].relase_year=newData.relase_year;
+    this.data[elInd].genre=newData.genre;
+
+    let res = await writeToJSON(this.data);
+    if (res === true)
     console.log(`
-    the Data for the Movie with ID: ${id} is now updated, \n and now it is as the following:`);
+    the Data for the Movie with ID: ${id} is now updated.`);
   }
   
   
@@ -96,9 +101,13 @@ export class movies {
     let id=this.data[elInd].id;
     let title=this.data[elInd].title;
     this.data.splice(elInd, 1);
+    let res = await writeToJSON(this.data);
+    if (res === true)
     console.log(`
     the Movie with ID: ${id} and has Title: ${title} , now is deleted`);
   }
+  else
+   console.log("Error happen in writting to the file");
   
   }
 
@@ -152,10 +161,59 @@ export class movies {
     if (res === true) console.log(`\n\tMovies Fetched and added succssfully`);
   }
 
+  async loadPreviouseData(){
+    let res,empty=false;
+    let histData=[];
+    histData = await readJsonFile("moviesHistoryData.json");
+    if(histData.length==0)
+    {   empty=true;
+        console.log("History Data are Empty , are you sure you want to import them -and save current to history- (Y/yes or N/no) ?");
+    }
+    while (true) {
+        answer=await input.getInput();
+       if (utils.isValidYesOrNo(answer)) break;
+     }
+     if(['yes','y'].includes( answer.toLowerCase()) || empty!==true)
+     {
+    res = await writeToJSON(this.data,"moviesHistoryData.json");
+    this.data=histData;
+    res = await writeToJSON(this.data,"movies.json");
+    console.log("Previouse Data Loaded Succssfully, and Current Data Saved to History");
+     }
+  }
 
-  async  getMovieData(){
+  async clearFileData(){
+    let answer;
+    console.log("Are You Sure You Want to Delete All Data (Y/yes or N/no) ?");
+    while (true) {
+        answer=await input.getInput();
+       if (utils.isValidYesOrNo(answer)) break;
+     }
+     if(['yes','y'].includes( answer.toLowerCase()) )
+     {
+    let res,res2;
+    res = await writeToJSON(this.data,"moviesHistoryData.json");
     
-    console.log('Enter Movie Name: ');
+    if (res === true)
+    {
+    this.data=[];
+    res2 = await writeToJSON(this.data);
+    if(res===true)
+    console.log("The data is cleared and saved to history");
+    else {
+        let restorRes;
+        restorRes = await writeToJSON([],"moviesHistoryData.json");
+    }
+     }
+    }
+     else {
+        console.log('okay , you choosed no.');
+     }
+  }
+
+  async  getMovieData(type="new"){
+    
+    console.log(type=="new"?'Enter Movie Name: ':'Enter Movie Updated Name: ');
     let title;
     while (true) {
        title=await input.getInput();
@@ -163,7 +221,7 @@ export class movies {
     }
   
   console.log(title);
-  console.log("Enter Movie Director: ");
+  console.log(type=="new"?"Enter Movie Director: ":"Enter Movie New Director Name: ");
   let director;
   while (true) {
      director=await input.getInput();
@@ -171,28 +229,31 @@ export class movies {
   }
   
   console.log(director);
-  console.log("Enter Info about Movie: ");
+  console.log(type=="new"?"Enter Info about Movie: ":"Enter Modified Info about Movie: ");
    let about
   while (true) {
    about=await input.getInput();
     if (utils.isValidTextInput(about,'about')) break;
   }
   console.log(about);
-  console.log("Enter Movie Release Year: ");
+  console.log(type=="new"?"Enter Movie Release Year: ":"Enter New True Movie Release Year: ");
   let year
   while (true) {
     year=await input.getInput();
     if (utils.isValidYear(year)) break;
   }
   console.log(year);
-  console.log("Enter Movie gener (1 for Action , 2 for Comedy , 3 for Documentary , 4 for Drama): ");
+  console.log(type=="new"?"Enter Movie gener":"Enter New Movie gener"+" (1 for Action , 2 for Comedy , 3 for Documentary , 4 for Drama): ");
   let gener;
   while (true) {
     gener=await input.getInput();
     if (utils.isValidGenreChoice(gener)) break;
   }
   console.log(gener);
-  let movie={
+
+  let movie;
+  if(type=="new"){
+   movie={
     "id": utils.getLargestID(obj.data)+1 ,
     "title": title ,
     "director": director,
@@ -200,10 +261,20 @@ export class movies {
     "relase_year": year ,
     "genre": utils.getNameById[eqeIdOfChoice[Number(gener)]]
   }
+}
+  else
+  {
+    
+   movie={
+    "title": title ,
+    "director": director,
+    "about": about ,
+    "relase_year": year ,
+    "genre": utils.getNameById[eqeIdOfChoice[Number(gener)]]
+  }
+  }
   return movie;
   }
-
-
 }
 
 

@@ -41,9 +41,9 @@ export async function handelKey(key) {
         break;
       case "3":
         console.log(`You Chosed the choice to ':'\n# > > `);
-
+        chooseMode = false;
         (async () => {
-          moveiClassObj.updateMoveDeials();
+          await moveiClassObj.updateMoveDeials();
           console.log("\nChoose what to do next ");
           chooseMode = true;
         })();
@@ -62,8 +62,9 @@ export async function handelKey(key) {
         break;
       case "5":
         console.log(`You Chosed the choice to ':'\n# > > `);
+        chooseMode = false;
         (async () => {
-          moveiClassObj.searchMovies();
+          await moveiClassObj.searchMovies();
           console.log("\nChoose what to do next ");
           chooseMode = true;
         })();
@@ -71,6 +72,7 @@ export async function handelKey(key) {
       case "6":
         console.log(
           `You Chosed the choice to ':'\n# > > ` );
+          chooseMode = false;
         (async () => {
           await moveiClassObj.fetchFromServer();
           console.log("\nChoose what to do next ");
@@ -79,14 +81,25 @@ export async function handelKey(key) {
         break;
         case "7":
         console.log(
-          `You Chosed the choice to 'Sort tasks by the due date:'\n# > > ` );
+          `You Chosed the choice to ':'\n# > > ` );
+          chooseMode = false;
         (async () => {
-          moveiClassObj.loadPreviouseData();
+          await moveiClassObj.loadPreviouseData();
           console.log("\nChoose what to do next ");
           chooseMode = true;
         })();
         break;
-      case "8":
+        case "8":
+        console.log(
+          `You Chosed the choice to ':'\n# > > ` );
+          chooseMode = false;
+        (async () => {
+          await moveiClassObj.clearFileData();
+          console.log("\nChoose what to do next ");
+          chooseMode = true;
+        })();
+        break;
+      case "9":
         console.log(`You Chosed the choice to Quit: bye ..! `);
         rl.close();
         break;
@@ -125,7 +138,8 @@ function printProgramMenu() {
       5) Search and Filter Movies
       6) Fetch Movie Data From Server
       7) Load Previouse Data
-      8) Quite
+      8) Clear File Data
+      9) Quite
       ***************************
       What's your choice?
   `);

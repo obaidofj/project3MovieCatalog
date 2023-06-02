@@ -10,7 +10,8 @@ export const rl = readline.createInterface({
   
    function overrideInput() {
     // Move the cursor to the beginning of the line
-    rl.write(null, { ctrl: true, name: "u" });
+    rl.write("null", { ctrl: true, name: "u" });
+    
   }
 export class input {
   
@@ -18,6 +19,7 @@ export class input {
     let input = "";
     overrideInput();
     try {
+       
       input = await new Promise(resolve => {
         rl.question(message, userInput => {
           resolve(userInput.trim());

@@ -8,7 +8,7 @@ function isValidYear(year) {
     //console.log(maxYear.toString().slice(-2,-1));
     var yearRegex = new RegExp(
         "^(18[0-9][0-9]|19[0-9][0-9]|20[0-"+ maxYear.toString().slice(-2,-1) +"]" +
-        "[0-" + maxYear.toString().slice(-1) + "])$"
+        "[0-" + maxYear.toString().slice(-1) + "]|20[0-1][0-9])$"
       );
   
     if (yearRegex.test(year)) {
@@ -18,4 +18,5 @@ function isValidYear(year) {
     }
   }
 
-  console.log(isValidYear(2026));
+  console.log(isValidYear(2027));
+ 
