@@ -1,5 +1,5 @@
 
-[{"id":2,"title":"sdf","director":"ssfsa","relase_year":"2022","genre":"fiction"}]
+[{"id":2,"title":"sdf","director":"ssfsa","release_year":"2022","genre":"fiction"}]
 
 ============================================  1 ====================================
 
@@ -51,7 +51,7 @@
 "id":1,
 "title": "movie title" ,
 "director": "director",
-"relase_year": "2022" ,
+"release_year": "2022" ,
 "genre": "fiction"
 }
 
@@ -60,7 +60,7 @@
     "id":2,
     "title": "movie title" ,
     "director": "director",
-    "relase_year": "2022" ,
+    "release_year": "2022" ,
     "genre": "fiction"
     }
 ,
@@ -68,7 +68,7 @@
     "id":3,
     "title": "movie title" ,
     "director": "director",
-    "relase_year": "2022" ,
+    "release_year": "2022" ,
     "genre": "fiction"
     }
     

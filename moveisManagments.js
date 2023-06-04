@@ -22,7 +22,7 @@ import * as utils from "./helperFunctions.js";
 import { moveiClassObj as obj , chooseMode } from "./main.js";
 import { input as inp, rl } from "./inputHandling.js";
 
-let eqeIdOfChoice={
+let eqevIdOfChoice={
     1:28,
     2: 35,
     3: 99,
@@ -39,14 +39,16 @@ export class movies {
     })();
   }
 
-  async displayCatalog() {
+  async displayCatalog(mode="",result=[]) {
    
+    if(mode=="")
+     result=this.data;
 
-    if (this.data.length !== 0)
-      this.data.forEach((el, ind) => {
+    if (result.length !== 0)
+      result.forEach((el, ind) => {
        
         console.log(
-          `#Seq_${ind}:---------------------------------------------------------- \n\tMovie ID: ${el.id} \n \tMovie Tile: ${el.title} \n \tDirector: ${el.director} \n \tAbout the Movie:  ${el.relase_year} \n \tRelease Year:  ${el.relase_year} \n \tGenre:  ${el.genre} `
+          `#Seq_${ind}:---------------------------------------------------------- \n\tMovie ID: ${el.id} \n \tMovie Tile: ${el.title} \n \tDirector: ${el.director} \n \tAbout the Movie:  ${el.about} \n \tRelease Year:  ${el.release_year} \n \tGenre:  ${el.genre} `
         );
         console.log(
           `------------------------------------------------------------------`
@@ -78,7 +80,7 @@ export class movies {
     this.data[elInd].title=newData.title;
     this.data[elInd].director=newData.director;
     this.data[elInd].about=newData.about;
-    this.data[elInd].relase_year=newData.relase_year;
+    this.data[elInd].release_year=newData.release_year;
     this.data[elInd].genre=newData.genre;
 
     let res = await writeToJSON(this.data);
@@ -111,9 +113,81 @@ export class movies {
   
   }
 
-  searchMovies(searchType, searchVal) {
-    console.log("func");
-  }
+  async searchMovies(searchType, searchVal) {
+    let inp='',choice='';
+    let searchResult=[];
+    let searchWord=true;
+
+    console.log(`\t\tChoose which search or filter for movies you want :
+                    \t\t1- Search by Title.
+                    \t\t2- Search for Director
+                    \t\t3- Filter by Genre
+                    \t\t4- Filter by year`);
+    
+  
+  console.log(`Enter the choice you want:`);
+
+  while(true) {
+    choice=await input.getInput();
+   if ([1,2,3,4].includes(choice)) break;
+ }
+
+ if(choice==1)
+ {
+  console.log("Enter the title text you want to search for:");
+  while(true) {
+    inp=await input.getInput();
+   if (utils.isValidTextInput(inp,"title")) break;
+ }
+
+ searchResult=this.data.filter(function (el) {
+  return (el.title.includes(inp) );
+  });
+ }
+ else if(choice==2){
+  console.log("Enter the director you want to search for:");
+  while(true) {
+    inp=await input.getInput();
+   if (utils.isValidTextInput(inp,"director")) break;
+ }
+
+ searchResult=this.data.filter(function (el) {
+  return (el.director.includes(inp) );
+  });
+ }
+ else if(choice==3){
+  searchWord=false;
+  console.log(`Enter the genre you want to filter movies according it
+                (1 for Action , 2 for Comedy , 3 for Documentary , 4 for Drama): `);
+  while(true) {
+    inp=await input.getInput();
+   if (utils.isValidGenreChoice(inp) ) break;
+ }
+
+ searchResult=this.data.filter(function (el) {
+  return (el.gener== utils.getNameById[eqevIdOfChoice[Number(inp)]] );
+  });
+ }
+ else if(choice==4){
+  searchWord=false;
+  console.log("Enter the year you want to filter movies according it:");
+  while(true) {
+    inp=await input.getInput();
+   if (utils.isValidYear(inp)) break;
+ }
+
+ searchResult=this.data.filter(function (el) {
+  return (el.year==inp );
+  });
+
+ }
+ 
+ 
+console.log("Here are the " +searchWord===true? "search":"filter" +" result:");
+displayCatalog("search",searchResult)
+
+}
+
 
   async fetchFromServer() {
     let fetcheadData;
@@ -145,10 +219,10 @@ export class movies {
         title: el.title,
         director: "-",
         about: el.overview,
-        relase_year: new Date(el.release_date).getFullYear(),
+        release_year: new Date(el.release_date).getFullYear(),
         genre: el.genre_ids
           .map(el => {
-            return getNameById[el];
+            return utils.getNameById[el];
           })
           .join(",")
       };
@@ -162,28 +236,52 @@ export class movies {
   }
 
   async loadPreviouseData(){
-    let res,empty=false;
+    let res,empty,madeEmpty=false;
+    let answer='';
     let histData=[];
-    histData = await readJsonFile("moviesHistoryData.json");
+    histData = await readJsonFile("moviesHistoryData.json"); 
+    
+    if(histData.length==0 && this.data.length==0){
+        console.log(`Booth History Data and Current data are empty. Nothing changed. regards..`);
+        return;
+    }
+
     if(histData.length==0)
     {   empty=true;
-        console.log("History Data are Empty , are you sure you want to import them -and save current to history- (Y/yes or N/no) ?");
-    }
+        console.log("History Data are Empty , are you sure you want to make current empty -and save current to history- (Y/yes or N/no) ?");
+    
     while (true) {
         answer=await input.getInput();
        if (utils.isValidYesOrNo(answer)) break;
      }
+    }
+
+   
      if(['yes','y'].includes( answer.toLowerCase()) || empty!==true)
      {
-    res = await writeToJSON(this.data,"moviesHistoryData.json");
+      if(empty===true)
+       madeEmpty=true;
+
+      let noNeedToSaveHist=false;
+      if(this.data.length!==0)
+      {
+       res = await writeToJSON(this.data,"moviesHistoryData.json");
+      }
+      else
+      noNeedToSaveHist=true;
     this.data=histData;
     res = await writeToJSON(this.data,"movies.json");
-    console.log("Previouse Data Loaded Succssfully, and Current Data Saved to History");
+    console.log(madeEmpty===true?"Now Current Data Empty":"Previouse Data Loaded Succssfully " + (noNeedToSaveHist!==true ? " , and Current Data Saved to History":""));
      }
   }
 
   async clearFileData(){
     let answer;
+    if(this.data.length==0){
+      console.log("Data already Empty, thanks .. ");
+      return;
+    }
+
     console.log("Are You Sure You Want to Delete All Data (Y/yes or N/no) ?");
     while (true) {
         answer=await input.getInput();
@@ -192,7 +290,9 @@ export class movies {
      if(['yes','y'].includes( answer.toLowerCase()) )
      {
     let res,res2;
+    
     res = await writeToJSON(this.data,"moviesHistoryData.json");
+
     
     if (res === true)
     {
@@ -213,7 +313,7 @@ export class movies {
 
   async  getMovieData(type="new"){
     
-    console.log(type=="new"?'Enter Movie Name: ':'Enter Movie Updated Name: ');
+    console.log(type=="new"?'Enter Movie Name: ':'Enter Movie New Name: ');
     let title;
     while (true) {
        title=await input.getInput();
@@ -258,8 +358,8 @@ export class movies {
     "title": title ,
     "director": director,
     "about": about ,
-    "relase_year": year ,
-    "genre": utils.getNameById[eqeIdOfChoice[Number(gener)]]
+    "release_year": year ,
+    "genre": utils.getNameById[eqevIdOfChoice[Number(gener)]]
   }
 }
   else
@@ -269,8 +369,8 @@ export class movies {
     "title": title ,
     "director": director,
     "about": about ,
-    "relase_year": year ,
-    "genre": utils.getNameById[eqeIdOfChoice[Number(gener)]]
+    "release_year": year ,
+    "genre": utils.getNameById[eqevIdOfChoice[Number(gener)]]
   }
   }
   return movie;

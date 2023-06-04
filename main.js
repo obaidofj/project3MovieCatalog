@@ -20,7 +20,7 @@ export async function handelKey(key) {
     chooseMode = false;
     switch (key.name) {
       case "1": 
-        console.log(`You Chosed the choice to ':'\n# > > `);
+        console.log(`You Chosed the choice to 'Display Movies Catalog:'\n# >>> `);
 
         (async () => {
             await moveiClassObj.displayCatalog();
@@ -29,7 +29,7 @@ export async function handelKey(key) {
         })();
         break;
       case "2":
-        console.log(`You Chosed the choice to ':'\n# > > `);
+        console.log(`You Chosed the choice to 'Add New Movie:'\n# >>> `);
         chooseMode = false;
         (async () => {
           let movie= await moveiClassObj.getMovieData();
@@ -40,7 +40,7 @@ export async function handelKey(key) {
         })();
         break;
       case "3":
-        console.log(`You Chosed the choice to ':'\n# > > `);
+        console.log(`You Chosed the choice to 'Update Movie Details:'\n# >>> `);
         chooseMode = false;
         (async () => {
           await moveiClassObj.updateMoveDeials();
@@ -49,9 +49,8 @@ export async function handelKey(key) {
         })();
         break;
       case "4":
-        console.log(`You Chosed the choice to ':'\n# > > `);
-        // rl.resume();
-        // rl.write("  ");
+        console.log(`You Chosed the choice to 'Delete Movie:'\n# >>> `);
+
         chooseMode = false;
         (async () => {
           await moveiClassObj.deleteMovie();
@@ -61,7 +60,7 @@ export async function handelKey(key) {
         
         break;
       case "5":
-        console.log(`You Chosed the choice to ':'\n# > > `);
+        console.log(`You Chosed the choice to 'Search and Filter Movies:'\n# >>> `);
         chooseMode = false;
         (async () => {
           await moveiClassObj.searchMovies();
@@ -71,7 +70,7 @@ export async function handelKey(key) {
         break;
       case "6":
         console.log(
-          `You Chosed the choice to ':'\n# > > ` );
+          `You Chosed the choice to 'Fetch Movie Data From Server:'\n# >>> ` );
           chooseMode = false;
         (async () => {
           await moveiClassObj.fetchFromServer();
@@ -81,7 +80,7 @@ export async function handelKey(key) {
         break;
         case "7":
         console.log(
-          `You Chosed the choice to ':'\n# > > ` );
+          `You Chosed the choice to 'Load Previouse Data:'\n# >>> ` );
           chooseMode = false;
         (async () => {
           await moveiClassObj.loadPreviouseData();
@@ -91,7 +90,7 @@ export async function handelKey(key) {
         break;
         case "8":
         console.log(
-          `You Chosed the choice to ':'\n# > > ` );
+          `You Chosed the choice to 'Clear File Data:'\n# >>> ` );
           chooseMode = false;
         (async () => {
           await moveiClassObj.clearFileData();
@@ -103,7 +102,10 @@ export async function handelKey(key) {
         console.log(`You Chosed the choice to Quit: bye ..! `);
         rl.close();
         break;
-        
+        case "0":
+          chooseMode = true;
+          printProgramMenu();      
+        break;
       default:
         console.log(
           `You have to choose a number (between 1 to 8) to do action as the List Above`
@@ -140,6 +142,7 @@ function printProgramMenu() {
       7) Load Previouse Data
       8) Clear File Data
       9) Quite
+      0) Print Program Menu
       ***************************
       What's your choice?
   `);

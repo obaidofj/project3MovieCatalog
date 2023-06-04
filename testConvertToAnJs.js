@@ -81,7 +81,7 @@ vr2.forEach((el)=>{
         "title": el.title ,
         "director": "-",
         "about":el.overview,
-        "relase_year": new Date(el.release_date).getFullYear() ,
+        "release_year": new Date(el.release_date).getFullYear() ,
         "genre": el.genre_ids.join(',')
       };
       newMovies.push(movie);
