@@ -1,4 +1,4 @@
-// const keypress = require('keypress');
+
 import readline from "readline";
 import {handelKey} from "./main.js";
 

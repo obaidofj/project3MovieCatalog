@@ -155,23 +155,23 @@ export function animateMessage(message,first) {
   if(first===true)
   {
   process.stdout.write('\x1Bc');
-  // process.stdout.write(`\x1B[${20}G${message}`);
   
     lines.forEach((line, index) => {
-      process.stdout.write(`\x1B[${0}G${line}`);
+      process.stdout.write(`\x1B[${6}G${line}`);
       if (index < lines.length - 1) {
         process.stdout.write('\n');
       }
     });
 
+    
   let intrId=setInterval(async () => {
 
-    process.stdout.write('\x1Bc');
+    process.stdout.write('\x1Bc');  //  screan clear
 
     // Move the cursor to the current position and print the message(Math.round(position/6)-Math.round(position/6))+
     
     
-    x+=20;
+    x+=15;
 
     lines.forEach((line, index) => {
       process.stdout.write(`\x1B[${x}G${line}`);
@@ -182,14 +182,15 @@ export function animateMessage(message,first) {
  
     
     if(x==60)
-     clearInterval(intrId);
+    {
+    clearInterval(intrId);
+    }
 
   },500); 
   
   }
   else
   {
-    // process.stdout.write('\x1Bc'); //  screan clear
     
     lines.forEach((line, index) => {
       process.stdout.write(`\x1B[${60}G${line}`);

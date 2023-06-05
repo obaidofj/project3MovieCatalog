@@ -1,26 +1,10 @@
-// Display Movie Catalog: Read movie data from a JSON file and display a list of movies in the catalog.
 
-// Add New Movie: Allow users to add new movies to the catalog by providing details such as title, director, release year, and genre. The movie data should be stored in the JSON file.
 
-// Update Movie Details: Enable users to edit the details of a specific movie by selecting the movie from the catalog and updating its properties like title, director, release year, and genre.
-
-// Delete Movie: Allow users to remove a movie from the catalog by selecting the movie and deleting it from the JSON file.
-
-// Search and Filter: Implement search functionality that allows users to search for movies by title, director, or genre. Additionally, provide options for filtering the movie catalog based on specific criteria like genre or release year.
-
-// Fetch Movie Data: Utilize the Fetch API to make HTTP requests to a movie database API (such as OMDB API) to fetch additional movies from the API and store it in the JSON file.
-
-// Modules: Structure the project using modules to separate concerns and improve maintainability. Create separate modules for file handling, movie management, API requests, and user interaction.
-
-// Async Programming: Implement asynchronous operations using Promises or async/await to handle file read/write operations and API requests.
-
-//modules
-
-//movie func modul
 import { readJsonFile, writeToJSON, jsonData } from "./filesHandling.js";
 import * as utils from "./helperFunctions.js";
 import { moveiClassObj as obj , chooseMode } from "./main.js";
 import { input as inp, rl } from "./inputHandling.js";
+import fetch from 'node-fetch';
 
 let eqevIdOfChoice={
     1:28,
@@ -93,7 +77,7 @@ export class movies {
   if(elInd!=='')
   {
     let id=this.data[elInd].id;
-    let newData=await this.getMovieData("modify");
+    let newData=await this.getMovieData("modify",this.data[elInd]);
     this.data[elInd].title=newData.title;
     this.data[elInd].director=newData.director;
     this.data[elInd].about=newData.about;
@@ -183,7 +167,10 @@ console.log(choice);
   searchWord=false;
   generSearch=true;
   console.log(`Enter the genre you want to filter movies according it
-                (1 for Action , 2 for Comedy , 3 for Documentary , 4 for Drama): `);
+                (1 for Action , 2 for Comedy , 3 for Documentary , 4 for Drama, 5 for Adventure
+                  6 for Animation, 7 for Fantasy , 8 for Family  , 9 for History, 10 for Music,
+                  11 for Mystery, 12 for Romance , 13 for Science Fiction, 14 for TV Movie, 
+                  15 for Thriller, 16 for War , 17 Western ,18 for Crime , 19 for Horror ): `);
   while(true) {
     inp=await input.getInput();
    if (utils.isValidGenreChoice(inp) ) break;
@@ -212,10 +199,10 @@ console.log(searchResult.length>0?"\t and here are them:":"");
 if(searchResult.length!==0)
  { 
     this.displayCatalog("search",searchResult);
-    console.log("\Choose what to do next (press 0 see main menu agin), or choose 5 if you want to do another search ");
+    console.log(`\n There was : ${searchResult.length} ${searchWord===true? "search":"filter"} Results, Press 5 if you want to do another search or choose another main choice from list or (press 0 to see the main list agin).  `);
  } 
  else{
-    console.log("\nChoose what to do next or press 0 to print the menu again ");
+    console.log("\nChoose what to do next (5 to do another search) or press 0 to print the main menu again ");
  }
 }
 
@@ -302,7 +289,7 @@ if(searchResult.length!==0)
       noNeedToSaveHist=true;
     this.data=histData;
     res = await writeToJSON(this.data,"movies.json");
-    console.log(madeEmpty===true?"Now Current Data Empty":"Previouse Data Loaded Succssfully " + (noNeedToSaveHist!==true ? " , and Current Data Saved to History":""));
+    console.log(madeEmpty===true?"\n\tNow Current Data Empty":"\n\t>> =  Previouse Data Loaded Succssfully " + (noNeedToSaveHist!==true ? ", and Current Data Saved to History":""));
      }
   }
 
@@ -330,7 +317,7 @@ if(searchResult.length!==0)
     this.data=[];
     res2 = await writeToJSON(this.data);
     if(res===true)
-    console.log("The data is cleared and saved to history");
+    console.log("\n\tThe data is cleared and saved to history");
     else {
         let restorRes;
         restorRes = await writeToJSON([],"moviesHistoryData.json");
@@ -342,9 +329,9 @@ if(searchResult.length!==0)
      }
   }
 
-  async  getMovieData(type="new"){
+  async  getMovieData(type="new",data={}){
     
-    console.log(type=="new"?'Enter Movie Name: ':'Enter Movie New Name: ');
+    console.log(type=="new"?'Enter Movie Name: ':"= => The Old name is:  "+data.title+"\n=> Enter Movie New Name:  ");
     let title;
     while (true) {
        title=await input.getInput();
@@ -352,7 +339,7 @@ if(searchResult.length!==0)
     }
   
   console.log(title);
-  console.log(type=="new"?"Enter Movie Director: ":"Enter Movie New Director Name: ");
+  console.log(type=="new"?"Enter Movie Director: ":"= => The Old director is:  "+data.director+"\n=> Enter Movie New Director Name:  ");
   let director;
   while (true) {
      director=await input.getInput();
@@ -360,24 +347,24 @@ if(searchResult.length!==0)
   }
   
   console.log(director);
-  console.log(type=="new"?"Enter Info about Movie: ":"Enter Modified Info about Movie: ");
+  console.log(type=="new"?"Enter Info about Movie: ":"= => The Old About info is:  "+data.about+"\n=> Enter Modified Info about Movie:  ");
    let about
   while (true) {
    about=await input.getInput();
     if (utils.isValidTextInput(about,'about')) break;
   }
   console.log(about);
-  console.log(type=="new"?"Enter Movie Release Year: ":"Enter New True Movie Release Year: ");
+  console.log(type=="new"?"Enter Movie Release Year: ":"= => The Old year is:  "+data.release_year+"\n=> Enter New True Movie Release Year:  ");
   let year
   while (true) {
     year=await input.getInput();
     if (utils.isValidYear(year)) break;
   }
   console.log(year);
-  console.log(`${type=="new"?"Enter Movie gener":"Enter New Movie gener"}\t       ( 1 for Action , 2 for Comedy , 3 for Documentary , 4 for Drama , 5 for Adventure
-                                6 for Animation, 7 for Fantasy , 8 for Family  , 9 for History, 10 for Music,
-                                11 for Mystery, 12 for Romance , 13 for Science Fiction, 14 for TV Movie, 
-                                15 for Thriller, 16 for War , 17 Western ,18 for Crime , 19 for Horror ): `);
+  console.log(`${type=="new"?"Enter Movie gener":"= => The Old gener is:  "+data.genre+ "\n=> Enter New Movie gener:"}( 1 for Action , 2 for Comedy , 3 for Documentary , 4 for Drama , 5 for Adventure
+                         6 for Animation, 7 for Fantasy , 8 for Family  , 9 for History, 10 for Music,
+                         11 for Mystery, 12 for Romance , 13 for Science Fiction, 14 for TV Movie, 
+                         15 for Thriller, 16 for War , 17 Western ,18 for Crime , 19 for Horror ):       `);
   let gener;
   while (true) {
     gener=await input.getInput();
@@ -416,21 +403,22 @@ async function enterValidIDofObj(arOfObjects) {
     let elInd = "";
   
     while (true) {
-      let tid = -1;
+      let objID = -1;
       let elInd = "";
   
-      tid = await input.getInput();
+      objID = await input.getInput();
   
       arOfObjects.forEach((element, ind) => {
-        if (element["id"] === parseInt(tid)) {
+        if (element["id"] === parseInt(objID)) {
           elInd = ind;
+          console.log(objID);
           return;
         }
       });
   
       if (elInd === "") {
         console.log(
-          `There is no Movie with ID: ${tid}. Please enter a valid Movie ID.`
+          `There is no Movie with ID: ${objID}. Please enter a valid Movie ID.`
         );
       } else return elInd;
     }

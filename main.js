@@ -28,7 +28,7 @@ export async function handelKey(key) {
 
         (async () => {
             await moveiClassObj.displayCatalog();
-            console.log("\nChoose what to do next or press 0 to print the menu again ");
+            console.log("\n  Choose what to do next or press 0 to print the menu again ");
             chooseMode = true;
         })();
         break;
@@ -39,7 +39,7 @@ export async function handelKey(key) {
           let movie= await moveiClassObj.getMovieData();
           await moveiClassObj.addNewMovie(movie);
         
-        console.log("\nChoose what to do next or press 0 to print the menu again ");
+        console.log("\n  Choose what to do next or press 0 to print the menu again ");
         chooseMode = true;
         })();
         break;
@@ -48,7 +48,7 @@ export async function handelKey(key) {
         chooseMode = false;
         (async () => {
           await moveiClassObj.updateMoveDeials();
-          console.log("\nChoose what to do next or press 0 to print the menu again  ");
+          console.log("\n  Choose what to do next or press 0 to print the menu again  ");
           chooseMode = true;
         })();
         break;
@@ -58,7 +58,7 @@ export async function handelKey(key) {
         chooseMode = false;
         (async () => {
           await moveiClassObj.deleteMovie();
-          console.log("\nChoose what to do next or press 0 to print the menu again  ");
+          console.log("\n  Choose what to do next or press 0 to print the menu again  ");
           chooseMode = true;
         })();
         
@@ -78,7 +78,7 @@ export async function handelKey(key) {
           chooseMode = false;
         (async () => {
           await moveiClassObj.fetchFromServer();
-          console.log("\nChoose what to do next or press 0 to print the menu again  ");
+          console.log("\n  Choose what to do next or press 0 to print the menu again  ");
           chooseMode = true;
         })();
         break;
@@ -88,7 +88,7 @@ export async function handelKey(key) {
           chooseMode = false;
         (async () => {
           await moveiClassObj.loadPreviouseData();
-          console.log("\nChoose what to do next or press 0 to print the menu again  ");
+          console.log("\n  Choose what to do next or press 0 to print the menu again  ");
           chooseMode = true;
         })();
         break;
@@ -98,7 +98,7 @@ export async function handelKey(key) {
           chooseMode = false;
         (async () => {
           await moveiClassObj.clearFileData();
-          console.log("\nChoose what to do next or press 0 to print the menu again  ");
+          console.log("\n  Choose what to do next or press 0 to print the menu again  ");
           chooseMode = true;
         })();
         break;
@@ -112,7 +112,7 @@ export async function handelKey(key) {
         break;
       default:
         console.log(
-          `You have to choose a number (between 1 to 8) to do action as the List Above`
+          `\t<> You have to choose a number (between 1 to 8) to do action as the List Above, or press 0 to re print the list`
         );
         chooseMode = true;
         break;
@@ -121,7 +121,7 @@ export async function handelKey(key) {
     console.log("");
   } else if (chooseMode == true && printFinished==true) {
     console.log(
-      "You have to choose a number (between 1 to 9) to do action as listed in the list, or press 0 to re print the program list"
+      "\t<> You have to choose a number (between 1 to 9) to do action as list, or press 0 to re print the program list"
     );
   } else if (chooseMode == false && printFinished==true) {
     process.stdout.write(key.sequence);
@@ -160,5 +160,5 @@ async function printProgramMenu() {
 }
 
 printProgramMenu();
-// process.stdout.write('\x1B[0G');
+
 
