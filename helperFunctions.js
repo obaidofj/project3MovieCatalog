@@ -137,7 +137,7 @@ export function isValidYesOrNo(inp) {
 }
 
 export function isValidGenreChoice(inp){
-  let genreChoices=[1,2,3,4];
+  let genreChoices=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19];
   return genreChoices.includes(Number(inp))
 }
 

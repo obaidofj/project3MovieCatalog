@@ -26,8 +26,25 @@ let eqevIdOfChoice={
     1:28,
     2: 35,
     3: 99,
-    4: 18
+    4: 18, 
+    5: 12, 
+    6: 16,
+    7: 14, 
+    8: 10751, 
+    9: 36 ,
+    10: 10402,
+    11: 9648, 
+    12: 10749, 
+    13: 878, 
+    14: 10770, 
+    15: 53, 
+    16: 10752 ,
+    17: 37, 
+    18: 80, 
+    19: 27,
   }
+ 
+  
 
 const input =new inp();
 export class movies {
@@ -48,7 +65,7 @@ export class movies {
       result.forEach((el, ind) => {
        
         console.log(
-          `#Seq_${ind}:---------------------------------------------------------- \n\tMovie ID: ${el.id} \n \tMovie Tile: ${el.title} \n \tDirector: ${el.director} \n \tAbout the Movie:  ${el.about} \n \tRelease Year:  ${el.release_year} \n \tGenre:  ${el.genre} `
+          `#Seq_${ind+1}:---------------------------------------------------------- \n\tMovie ID: ${el.id} \n \tMovie Tile: ${el.title} \n \tDirector: ${el.director} \n \tAbout the Movie:  ${el.about} \n \tRelease Year:  ${el.release_year} \n \tGenre:  ${el.genre} `
         );
         console.log(
           `------------------------------------------------------------------`
@@ -56,7 +73,7 @@ export class movies {
       });
     else
       console.log(
-        ` \tThe File Is Empty (><) , \n\tyou can choose 2 to add new movie or 6 to fetch data from server `
+        ` \t= The File Is Empty (><) , \n\tyou can choose 2 to add new movie or 6 to fetch data from server or 7 to restore pervoiuse old data if any`
       );
   }
 
@@ -117,6 +134,12 @@ export class movies {
     let inp='',choice='';
     let searchResult=[];
     let searchWord=true;
+    let generSearch=false;
+
+    if(this.data.length==0){
+        console.log(`\t\tThe data are empty , you can add Movei by choose 2 or choose 6 to fetch data from server or 7 to restore previouse saved data if any..`);
+        return;
+    }
 
     console.log(`\t\tChoose which search or filter for movies you want :
                     \t\t1- Search by Title.
@@ -129,8 +152,9 @@ export class movies {
 
   while(true) {
     choice=await input.getInput();
-   if ([1,2,3,4].includes(choice)) break;
+   if ([1,2,3,4].includes(Number(choice))) break;
  }
+console.log(choice);
 
  if(choice==1)
  {
@@ -139,7 +163,7 @@ export class movies {
     inp=await input.getInput();
    if (utils.isValidTextInput(inp,"title")) break;
  }
-
+ console.log(inp);
  searchResult=this.data.filter(function (el) {
   return (el.title.includes(inp) );
   });
@@ -150,22 +174,23 @@ export class movies {
     inp=await input.getInput();
    if (utils.isValidTextInput(inp,"director")) break;
  }
-
+ console.log(inp);
  searchResult=this.data.filter(function (el) {
   return (el.director.includes(inp) );
   });
  }
  else if(choice==3){
   searchWord=false;
+  generSearch=true;
   console.log(`Enter the genre you want to filter movies according it
                 (1 for Action , 2 for Comedy , 3 for Documentary , 4 for Drama): `);
   while(true) {
     inp=await input.getInput();
    if (utils.isValidGenreChoice(inp) ) break;
  }
-
+ console.log(inp);
  searchResult=this.data.filter(function (el) {
-  return (el.gener== utils.getNameById[eqevIdOfChoice[Number(inp)]] );
+  return (el.genre.split(',').includes(utils.getNameById[eqevIdOfChoice[Number(inp)]]) );
   });
  }
  else if(choice==4){
@@ -175,17 +200,23 @@ export class movies {
     inp=await input.getInput();
    if (utils.isValidYear(inp)) break;
  }
-
+ console.log(inp);
  searchResult=this.data.filter(function (el) {
-  return (el.year==inp );
+  return (el.release_year==inp );
   });
 
  }
- 
- 
-console.log("Here are the " +searchWord===true? "search":"filter" +" result:");
-displayCatalog("search",searchResult)
 
+console.log(`\t${searchResult.length==0?'Sorry':''} There was ${searchResult.length} ${searchWord===true? "search":"filter"} results for (${generSearch?' - '+utils.getNameById[eqevIdOfChoice[Number(inp)]]+' - ':inp})`);
+console.log(searchResult.length>0?"\t and here are them:":"");
+if(searchResult.length!==0)
+ { 
+    this.displayCatalog("search",searchResult);
+    console.log("\Choose what to do next (press 0 see main menu agin), or choose 5 if you want to do another search ");
+ } 
+ else{
+    console.log("\nChoose what to do next or press 0 to print the menu again ");
+ }
 }
 
 
@@ -217,7 +248,7 @@ displayCatalog("search",searchResult)
         id: maxCurId + i,
         original_server_film_id: el.id,
         title: el.title,
-        director: "-",
+        director: "no data for director",
         about: el.overview,
         release_year: new Date(el.release_date).getFullYear(),
         genre: el.genre_ids
@@ -343,7 +374,10 @@ displayCatalog("search",searchResult)
     if (utils.isValidYear(year)) break;
   }
   console.log(year);
-  console.log(type=="new"?"Enter Movie gener":"Enter New Movie gener"+" (1 for Action , 2 for Comedy , 3 for Documentary , 4 for Drama): ");
+  console.log(`${type=="new"?"Enter Movie gener":"Enter New Movie gener"}\t       ( 1 for Action , 2 for Comedy , 3 for Documentary , 4 for Drama , 5 for Adventure
+                                6 for Animation, 7 for Fantasy , 8 for Family  , 9 for History, 10 for Music,
+                                11 for Mystery, 12 for Romance , 13 for Science Fiction, 14 for TV Movie, 
+                                15 for Thriller, 16 for War , 17 Western ,18 for Crime , 19 for Horror ): `);
   let gener;
   while (true) {
     gener=await input.getInput();

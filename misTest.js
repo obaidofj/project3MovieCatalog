@@ -18,5 +18,16 @@ function isValidYear(year) {
     }
   }
 
-  console.log(isValidYear(2027));
+  // console.log(isValidYear(2027));
  
+  let xx={
+    "id": 18,
+    "original_server_film_id": 758323,
+    "title": "The Pope's Exorcist",
+    "director": "-",
+    "about": "Father Gabriele Amorth, Chief Exorcist of the Vatican, investigates a young boy's terrifying possession and ends up uncovering a centuries-old conspiracy the Vatican has desperately tried to keep hidden.",
+    "release_year": 2023,
+    "genre": ""
+};
+
+console.log( xx.genre.split(','));

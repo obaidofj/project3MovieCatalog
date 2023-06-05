@@ -24,7 +24,7 @@ export async function handelKey(key) {
 
         (async () => {
             await moveiClassObj.displayCatalog();
-            console.log("\nChoose what to do next ");
+            console.log("\nChoose what to do next or press 0 to print the menu again ");
             chooseMode = true;
         })();
         break;
@@ -35,7 +35,7 @@ export async function handelKey(key) {
           let movie= await moveiClassObj.getMovieData();
           await moveiClassObj.addNewMovie(movie);
         
-        console.log("\nChoose what to do next ");
+        console.log("\nChoose what to do next or press 0 to print the menu again ");
         chooseMode = true;
         })();
         break;
@@ -44,7 +44,7 @@ export async function handelKey(key) {
         chooseMode = false;
         (async () => {
           await moveiClassObj.updateMoveDeials();
-          console.log("\nChoose what to do next ");
+          console.log("\nChoose what to do next or press 0 to print the menu again  ");
           chooseMode = true;
         })();
         break;
@@ -54,7 +54,7 @@ export async function handelKey(key) {
         chooseMode = false;
         (async () => {
           await moveiClassObj.deleteMovie();
-          console.log("\nChoose what to do next ");
+          console.log("\nChoose what to do next or press 0 to print the menu again  ");
           chooseMode = true;
         })();
         
@@ -64,7 +64,7 @@ export async function handelKey(key) {
         chooseMode = false;
         (async () => {
           await moveiClassObj.searchMovies();
-          console.log("\nChoose what to do next ");
+          
           chooseMode = true;
         })();
         break;
@@ -74,7 +74,7 @@ export async function handelKey(key) {
           chooseMode = false;
         (async () => {
           await moveiClassObj.fetchFromServer();
-          console.log("\nChoose what to do next ");
+          console.log("\nChoose what to do next or press 0 to print the menu again  ");
           chooseMode = true;
         })();
         break;
@@ -84,7 +84,7 @@ export async function handelKey(key) {
           chooseMode = false;
         (async () => {
           await moveiClassObj.loadPreviouseData();
-          console.log("\nChoose what to do next ");
+          console.log("\nChoose what to do next or press 0 to print the menu again  ");
           chooseMode = true;
         })();
         break;
@@ -94,7 +94,7 @@ export async function handelKey(key) {
           chooseMode = false;
         (async () => {
           await moveiClassObj.clearFileData();
-          console.log("\nChoose what to do next ");
+          console.log("\nChoose what to do next or press 0 to print the menu again  ");
           chooseMode = true;
         })();
         break;
@@ -117,7 +117,7 @@ export async function handelKey(key) {
     console.log("");
   } else if (chooseMode == true) {
     console.log(
-      "You have to choose a number (between 1 to 9) to do action as the List Above"
+      "You have to choose a number (between 1 to 9) to do action as listed in the list, or press 0 to re print the program list"
     );
   } else if (chooseMode == false) {
     process.stdout.write(key.sequence);
@@ -129,7 +129,7 @@ export async function handelKey(key) {
 
 function printProgramMenu() {
   console.log(`
-  ***************************
+      ***************************
       Welcome to Movies Catalog APP
       ***************************
       Select an action:
