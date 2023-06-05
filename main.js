@@ -10,6 +10,8 @@ let chooseMode;
 let firstTime=true;
 export { chooseMode };
 chooseMode= true;
+let printFinished=false;
+
 
 export let moveiClassObj = new movies();
 let input = new inp();
@@ -18,7 +20,7 @@ let input = new inp();
 
 
 export async function handelKey(key) {
-  if (!isNaN(key.name) && key.name != "" && chooseMode != false) {
+  if (!isNaN(key.name) && key.name != "" && chooseMode != false && printFinished==true) {
     chooseMode = false;
     switch (key.name) {
       case "1": 
@@ -117,11 +119,11 @@ export async function handelKey(key) {
     }
   } else if (key && key.name === "enter") {
     console.log("");
-  } else if (chooseMode == true) {
+  } else if (chooseMode == true && printFinished==true) {
     console.log(
       "You have to choose a number (between 1 to 9) to do action as listed in the list, or press 0 to re print the program list"
     );
-  } else if (chooseMode == false) {
+  } else if (chooseMode == false && printFinished==true) {
     process.stdout.write(key.sequence);
   }
   };
@@ -147,10 +149,13 @@ async function printProgramMenu() {
       0) Print Program Menu
       ***************************
          What's your choice? 
-                           `,firstTime);
-  firstTime=false;
-
+                       `,firstTime);
  
+ firstTime=false;
+
+ setTimeout(()=>{
+ printFinished=true;
+ },1500);
 
 }
 
