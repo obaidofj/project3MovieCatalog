@@ -2,7 +2,7 @@ let gr =
    [
       {
         "id": 28,
-        "name": "Action"
+        "name": "Action",
       },
       {
         "id": 12,
@@ -76,11 +76,14 @@ let gr =
         "id": 37,
         "name": "Western"
       }
-   ]
+  
+    ];
   
 
+for (let key in gr)
+console.log(key);
 
-console.log(  Array.from(gr).forEach((el)=> console.log(el.id+"-"+el.name) ));//Object.keys(gr)
+// console.log(  Array.from(gr).forEach((el)=> console.log(el.id+"-"+el.name) ));//Object.keys(gr)
 /*
 28
 12

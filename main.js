@@ -5,7 +5,9 @@ import { input as inp, rl } from "./inputHandling.js";
 import * as utils from'./helperFunctions.js';
 
 
- let chooseMode;
+
+let chooseMode;
+let firstTime=true;
 export { chooseMode };
 chooseMode= true;
 
@@ -127,12 +129,12 @@ export async function handelKey(key) {
 
 
 
-function printProgramMenu() {
-  console.log(`
+async function printProgramMenu() {
+ await utils.animateMessage(`
       ***************************
       Welcome to Movies Catalog APP
       ***************************
-      Select an action:
+          Select an action:
       1) Display Movies Catalog
       2) Add New Movie
       3) Update Movie Details
@@ -144,10 +146,14 @@ function printProgramMenu() {
       9) Quite
       0) Print Program Menu
       ***************************
-      What's your choice?
-  `);
+         What's your choice? 
+                           `,firstTime);
+  firstTime=false;
+
+ 
+
 }
 
 printProgramMenu();
-
+// process.stdout.write('\x1B[0G');
 
